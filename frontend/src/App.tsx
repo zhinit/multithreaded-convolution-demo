@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import "./App.css";
 
 const BLOCK = 128;
@@ -7,6 +7,7 @@ const MAX_RING_BLOCKS = 64;
 const SAB_SIZE = 8 + MAX_RING_BLOCKS * BLOCK * 3 * 4;
 
 function App() {
+  const [ready, setReady] = useState(false);
   const audioContextRef = useRef<AudioContext | null>(null);
   const workletNodeRef = useRef<AudioWorkletNode | null>(null);
 
@@ -109,13 +110,10 @@ function App() {
 
     audioContextRef.current = ctx;
     workletNodeRef.current = node;
+    setReady(true);
   };
 
   const handleCue = async () => {
-    if (!audioContextRef.current) {
-      await initAudio();
-    }
-
     if (audioContextRef.current?.state === "suspended") {
       await audioContextRef.current.resume();
     }
@@ -126,7 +124,11 @@ function App() {
   return (
     <div>
       <h1>Multithreaded Convolution Reverb</h1>
-      <button onPointerDown={handleCue}>Cue</button>
+      {!ready ? (
+        <button onPointerDown={initAudio}>Load</button>
+      ) : (
+        <button onPointerDown={handleCue}>Trigger</button>
+      )}
     </div>
   );
 }
