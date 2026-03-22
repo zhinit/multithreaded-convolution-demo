@@ -7,6 +7,7 @@ Real-time multithreaded convolution reverb running a 30-second impulse response 
 ## What Was Done
 
 I started out by building simplified pieces to gain a deeper understanding of exactly what is happening:
+
 **Built by hand:**
 - DFT and IDFT (`naive_convolution/dft.ts`, `idft.ts`)
 - Naive linear and circular convolution (`naive_convolution/linear-convolve.ts`, `circular-convolve.ts`)
